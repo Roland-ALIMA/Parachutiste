@@ -34,9 +34,12 @@ class Parachutiste {
 
 		int depasseVitesseSon = 0;
 		int limiteHauteur = 0;
+		int vitesseMax = 0;
 
 		double s = surface/masse;
 		double vitesseSon = 343;
+		
+		System.out.printf("%.0f, %.4f, %.4f, %.5f\n", t, hauteur, vitesse, accel);
 
 		while (hauteur > 0) {
 
@@ -48,22 +51,26 @@ class Parachutiste {
 				hauteur = h0 - (g/s)*(t - t0) - ((v0 - (g/s))/s)*(1 - q);
 				accel = g - s*vitesse;
 
-				if (accel < 0.5) {
+				if (vitesse > vitesseSon) {
 					depasseVitesseSon++;
 				}
 
 				if (hauteur < 2500) {
 					limiteHauteur++;
 				}
+				
+				if (accel < 0.5) {
+					vitesseMax++;
+				}
 
-				if (vitesse <= vitesseSon + 1 && vitesse > vitesseSon - 1) {
+				if (depasseVitesseSon == 1) {
 					System.out.println("## Felix depasse la vitesse du son");
 					System.out.printf("%.0f, %.4f, %.4f, %.5f\n", t, hauteur, vitesse, accel);
-				} else if (depasseVitesseSon == 1) {
+				} else if (vitesseMax == 1) {
 					System.out.println("## Felix a atteint sa vitesse maximale");
 					System.out.printf("%.0f, %.4f, %.4f, %.5f\n", t, hauteur, vitesse, accel);
 				} else { 
-					if (limiteHauteur == 1 && hauteur < 2500) {
+					if (limiteHauteur == 1) {
 						System.out.println("## Felix ouvre son parachute");
 						v0 = vitesse;
 						h0 = hauteur;
@@ -95,15 +102,19 @@ class Parachutiste {
 				}
 
 				if (accel < 0.5) {
-					depasseVitesseSon++;
+					vitesseMax++;
 				}
 
 				if (hauteur > 0) {
-					if (depasseVitesseSon == 1) {
+					if (vitesseMax == 1) {
 						System.out.println("## Felix a atteint sa vitesse maximale");
 						System.out.printf("%.0f, %.4f, %.4f, %.5f\n", t, hauteur, vitesse, accel);
 					} else {
 						System.out.printf("%.0f, %.4f, %.4f, %.5f\n", t, hauteur, vitesse, accel);
+					}
+				} else {
+					if (vitesseMax == 1) {
+						System.out.println("## Felix a atteint sa vitesse maximale");
 					}
 				}
 
